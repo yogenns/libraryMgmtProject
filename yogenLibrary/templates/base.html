@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-    <head>
-        <title>Yogendra's Library</title>
-        <link rel="stylesheet" href="{% static 'library_app/css/master.css'%}">
-        <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css'%}">
-        <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap-grid.min.css'%}">
-    </head>
-    <body>
-        <nav class=" navbar navbar-expand-lg mynav">
-          <div class="container">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <ul class="nav nabar-nav mr-auto">
-              <li><a class="btn btn-simple" href="#">Browse</a></li>
-              {% if user.is_authenticated %}
-                <li><a class="btn btn-simple" href="#">Manage</a></li>
-              {% endif %}
-            </ul>
-            <ul class="nav nabar-nav navbar-right">
-              
-              {% if user.is_authenticated %}
-                <li><a class="btn btn-simple" href="#">Log Out</a></li>
-              {% else %}
-                <li><a class="btn btn-simple" href="#">Sign Up</a></li>
-                <li><a class="btn btn-simple" href="#">Log In</a></li>
-              {% endif %}
-            </ul>
-          </div>
-            
-          </nav>
 
-        {% block body_block %}
-        {% endblock %}
-    </body>
+<head>
+  <title>Yogendra's Library</title>
+  <link rel="stylesheet" href="{% static 'library_app/css/master.css'%}">
+  <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css'%}">
+  <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap-grid.min.css'%}">
+</head>
+
+<body>
+  <nav class=" navbar navbar-expand-lg mynav">
+    <div class="container">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <ul class="nav nabar-nav mr-auto">
+        <li><a class="btn btn-simple" href="#">Browse</a></li>
+        {% if user.is_authenticated %}
+        <li><a class="btn btn-simple" href="#">Manage</a></li>
+        {% endif %}
+      </ul>
+      <ul class="nav nabar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li><a class="btn btn-simple" href="{% url 'library_app:logout' %}">Log Out</a></li>
+        {% else %}
+        <li>
+          <a class="btn btn-simple" href="{% url 'library_app:signup' %}">Sign Up</a>
+        </li>
+        <li>
+          <a class="btn btn-simple" href="{% url 'library_app:login' %}">Log In</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  {% block body_block %}
+  {% endblock %}
+</body>
+
 </html>
