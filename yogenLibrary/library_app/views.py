@@ -10,6 +10,6 @@ class HomeView(TemplateView):
 
 
 class SignUp(CreateView):
-    form_class = forms.UserCreationForm
+    form_class = forms.CreateUserForm
     success_url = reverse_lazy('library_app:login')
     template_name = 'library_app/signup.html'
