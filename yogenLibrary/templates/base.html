@@ -7,30 +7,53 @@
   <link rel="stylesheet" href="{% static 'library_app/css/master.css'%}">
   <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css'%}">
   <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap-grid.min.css'%}">
+
+
+  <script src="{% static 'jquery/js/jquery-3.5.1.min.js' %}"></script>
+  <script src="{% static 'bootstrap-4.5.2-dist/js/bootstrap.min.js'%}"></script>
 </head>
 
 <body>
-  <nav class=" navbar navbar-expand-lg mynav">
+  <nav class=" navbar navbar-expand-lg navbar-light mynav">
     <div class="container">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <ul class="nav nabar-nav mr-auto">
-        <li><a class="btn btn-simple" href="#">Browse</a></li>
-        {% if user.is_authenticated %}
-        <li><a class="btn btn-simple" href="#">Manage</a></li>
-        {% endif %}
-      </ul>
-      <ul class="nav nabar-nav navbar-right">
-        {% if user.is_authenticated %}
-        <li><a class="btn btn-simple" href="{% url 'library_app:logout' %}">Log Out</a></li>
-        {% else %}
-        <li>
-          <a class="btn btn-simple" href="{% url 'library_app:signup' %}">Sign Up</a>
-        </li>
-        <li>
-          <a class="btn btn-simple" href="{% url 'library_app:login' %}">Log In</a>
-        </li>
-        {% endif %}
-      </ul>
+      <a class="navbar-brand" href="{% url 'library_app:home' %}">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="nav nabar-nav mr-auto">
+          <li><a class="btn btn-simple" href="#">Browse</a></li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">Manage</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% if user.is_superuser %}
+              <a class="dropdown-item" href="#">Add Genre</a>
+              <a class="dropdown-item" href="#">Add Author</a>
+              <a class="dropdown-item" href="#">Upload Book</a>
+              {% else %}
+              <a class="dropdown-item" href="#">My loans</a>
+              {% endif %}
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+        <ul class="nav nabar-nav navbar-right">
+          {% if user.is_authenticated %}
+          <li><a class="btn btn-simple" href="{% url 'library_app:logout' %}">Log Out</a></li>
+          {% else %}
+          <li>
+            <a class="btn btn-simple" href="{% url 'library_app:signup' %}">Sign Up</a>
+          </li>
+          <li>
+            <a class="btn btn-simple" href="{% url 'library_app:login' %}">Log In</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </nav>
 
