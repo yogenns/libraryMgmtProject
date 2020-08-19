@@ -3,6 +3,8 @@ from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 # Create your views here.
 
 
@@ -16,7 +18,13 @@ class SignUp(CreateView):
     template_name = 'library_app/signup.html'
 
 
-class CreateGenreView(CreateView):
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class CreateGenreView(SuperUserRequiredMixin, CreateView):
     form_class = forms.CreateGenreForm
     success_url = reverse_lazy('library_app:genre')
     template_name = 'library_app/genre.html'

@@ -31,7 +31,7 @@
             <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">Manage</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               {% if user.is_superuser %}
-              <a class="dropdown-item" href="#">Add Genre</a>
+              <a class="dropdown-item" href="{% url 'library_app:genre' %}">Add Genre</a>
               <a class="dropdown-item" href="#">Add Author</a>
               <a class="dropdown-item" href="#">Upload Book</a>
               {% else %}
