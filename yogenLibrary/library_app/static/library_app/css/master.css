@@ -4,3 +4,8 @@ body {
 .mynav {
   background-color: #e3f2fd;
 }
+
+.coverImgSmall{
+  height: 50px;
+  width: 50px;
+}

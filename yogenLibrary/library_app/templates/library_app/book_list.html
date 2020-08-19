@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body_block %}
+<div class="container">
+    <h3>Book List</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Cover</th>
+                <th scope="col">Author</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Publication</th>
+                <th scope="col">Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in book_list %}
+            <tr>
+                <th scope="row">{{book.pk}}</th>
+                <td>{{book.title}}</td>
+                <td><img class="coverImgSmall" src="/media/{{book.book_cover}}"></td>
+                <td>{{book.author}}</td>
+                <td>{{book.genre}}</td>
+                <td>{{book.publication}}</td>
+                <td>{{book.year}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

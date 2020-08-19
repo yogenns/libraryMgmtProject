@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -42,3 +42,18 @@ class CreateAuthorView(SuperUserRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         kwargs['author_list'] = models.Author.objects.order_by('id')
         return super(CreateAuthorView, self).get_context_data(**kwargs)
+
+
+class UploadBookView(SuperUserRequiredMixin, CreateView):
+    fields = ('title', 'author', 'genre', 'book_cover',
+              'description', 'uploader', 'publication', 'year')
+    model = models.Book
+    success_url = reverse_lazy('library_app:books')
+    template_name = 'library_app/upload_book.html'
+
+
+class BookListView(ListView):
+    model = models.Book
+
+    def get_queryset(self):
+        return models.Book.objects.all()
