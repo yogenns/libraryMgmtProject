@@ -32,3 +32,13 @@ class CreateGenreView(SuperUserRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         kwargs['genre_list'] = models.Genre.objects.order_by('id')
         return super(CreateGenreView, self).get_context_data(**kwargs)
+
+
+class CreateAuthorView(SuperUserRequiredMixin, CreateView):
+    form_class = forms.CreateAuthorForm
+    success_url = reverse_lazy('library_app:author')
+    template_name = 'library_app/author.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['author_list'] = models.Author.objects.order_by('id')
+        return super(CreateAuthorView, self).get_context_data(**kwargs)

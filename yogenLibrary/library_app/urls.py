@@ -9,4 +9,5 @@ urlpatterns = [
     url('logout/', auth_views.LogoutView.as_view(), name='logout'),
     url('signup/', views.SignUp.as_view(), name='signup'),
     url('genre/', views.CreateGenreView.as_view(), name='genre'),
+    url('author/', views.CreateAuthorView.as_view(), name='author'),
 ]
