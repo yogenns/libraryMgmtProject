@@ -52,6 +52,7 @@ class CreateAuthorView(SuperUserRequiredMixin, CreateView):
 
 
 class BookListView(ListView):
+    paginate_by = 10
     model = models.Book
 
     def get_queryset(self):
