@@ -2,10 +2,18 @@
 {% block body_block %}
 <div class="container">
     <h3>Book List</h3>
-    <table class="table">
+    <div class="toolbar">
+        <form id="form-btn" action="/books/" method="POST">
+            {% csrf_token %}
+            <button id="view" class="btn btn-info" disabled onclick="view()">View</button>
+            <button id="remove" class="btn btn-danger" disabled onclick="remove()">Delete</button>
+            <input type="hidden" id="selectedRows" name="selectedRows">
+        </form>
+    </div>
+    <table id="table" class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col" data-checkbox="true">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Cover</th>
                 <th scope="col">Author</th>
@@ -16,8 +24,10 @@
         </thead>
         <tbody>
             {% for book in book_list %}
-            <tr>
-                <th scope="row">{{book.pk}}</th>
+            <tr id="{{book.pk}}">
+                <th scope="row">
+                    <input type="checkbox" class="largerCheckbox" id="{{book.pk}}" onchange="setSelection(this)">
+                </th>
                 <td>{{book.title}}</td>
                 <td><img class="coverImgSmall" src="/media/{{book.book_cover}}"></td>
                 <td>{{book.author}}</td>
@@ -28,7 +38,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="PageNavigation" class="page-nav">
         <ul class="pagination">
             {% if page_obj.has_previous %}
             <li class="page-item ">
@@ -63,4 +73,37 @@
     </nav>
 
 </div>
+
+<script>
+    selections = []
+    function view() {
+        console.log("View Id " + selections[0]);
+        window.location = '/view/book/' + selections[0];
+    }
+    function remove() {
+        var form = document.getElementById("form-btn");
+    }
+    function setSelection(temp) {
+
+        if (temp.checked == true) {
+            selections.push(temp.id)
+        }
+        else {
+            selections.splice(selections.indexOf(temp.id), 1)
+        }
+        if (selections.length > 0) {
+            $("#remove").prop('disabled', false)
+
+        } else {
+            $("#remove").prop('disabled', true)
+        }
+        if (selections.length == 1) {
+            $("#view").prop('disabled', false)
+        } else {
+            $("#view").prop('disabled', true)
+        }
+        console.log(selections);
+        document.getElementById('selectedRows').value = selections
+    }
+</script>
 {% endblock %}

@@ -58,6 +58,11 @@ class BookListView(ListView):
     def get_queryset(self):
         return models.Book.objects.all()
 
+    def post(self, request, *args, **kwargs):
+        print(request.POST.get("selectedRows"))
+        print(self)
+        return self.get(request, *args, **kwargs)
+
 
 class ContactWizard(SuperUserRequiredMixin, SessionWizardView):
     template_name = 'library_app/upload_book.html'
