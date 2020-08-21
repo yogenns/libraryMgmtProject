@@ -1,13 +1,33 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
+
 {% block body_block %}
-<div class="container">
-    <h1>Upload Book</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <input type="submit" class="btn btn-primary" value="Upload">
-    </form>
-    <hr>
+<div class="container upload-form">
+    {{ wizard.form.media }}
+
+    <div class="card row">
+        <div class="card-block upload-card">
+            <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+            <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="container-fluid justify-content-left mt-0">
+                    {{ wizard.management_form }}
+                    {% if wizard.form.forms %}
+                    {{ wizard.form.management_form }}
+                    {% for form in wizard.form.forms %}
+                    {% bootstrap_form form %}
+                    {% endfor %}
+                    {% else %}
+                    {% bootstrap_form wizard.form %}
+                    {% endif %}
+                </div>
+
+                {% if wizard.steps.step1 == 1 %}
+                <input type="submit" class="btn btn-info" value="Next" />
+                {% else %}
+                <input type="submit" class="btn btn-success" value="Submit" />
+                {% endif %}
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

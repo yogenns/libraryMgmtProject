@@ -18,6 +18,7 @@ class Author(models.Model):
 
 
 class Book(models.Model):
+    book_file = models.FileField(upload_to="library_app/", default='')
     title = models.CharField(max_length=1024)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
