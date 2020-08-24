@@ -56,11 +56,34 @@ class BookListView(ListView):
     model = models.Book
 
     def get_queryset(self):
-        return models.Book.objects.all()
+        return models.Book.objects.all().order_by('pk')
 
     def post(self, request, *args, **kwargs):
-        print(request.POST.get("selectedRows"))
-        print(self)
+        # print(request.POST.get("selectedRows"))
+        row_list = request.POST.get("selectedRows").split(',')
+        for row in row_list:
+            print("Delete Book with Id "+row)
+            try:
+                remove_book = models.Book.objects.get(pk=row)
+                # Remove Cover
+                if os.path.exists(remove_book.book_cover.path):
+                    print("Removed file "+remove_book.book_cover.path)
+                    os.remove(remove_book.book_cover.path)
+                else:
+                    print("The file does not exist " +
+                          remove_book.book_cover.path)
+                # Remove File
+                if remove_book.book_file != '':
+                    if os.path.exists(remove_book.book_file.path):
+                        print("Removed file "+remove_book.book_file.path)
+                        os.remove(remove_book.book_file.path)
+                    else:
+                        print("The file does not exist " +
+                              remove_book.book_file.path)
+                remove_book.delete()
+            except models.Book.DoesNotExist:
+                print("Cannot Remove Book. Object Does not exit")
+
         return self.get(request, *args, **kwargs)
 
 

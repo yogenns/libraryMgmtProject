@@ -6,7 +6,7 @@
         <form id="form-btn" action="/books/" method="POST">
             {% csrf_token %}
             <button id="view" class="btn btn-info" disabled onclick="view()">View</button>
-            <button id="remove" class="btn btn-danger" disabled onclick="remove()">Delete</button>
+            <button type="submit" id="remove" class="btn btn-danger" disabled>Delete</button>
             <input type="hidden" id="selectedRows" name="selectedRows">
         </form>
     </div>
@@ -34,6 +34,10 @@
                 <td>{{book.genre}}</td>
                 <td>{{book.publication}}</td>
                 <td>{{book.year}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No Books Found</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -79,9 +83,6 @@
     function view() {
         console.log("View Id " + selections[0]);
         window.location = '/view/book/' + selections[0];
-    }
-    function remove() {
-        var form = document.getElementById("form-btn");
     }
     function setSelection(temp) {
 
