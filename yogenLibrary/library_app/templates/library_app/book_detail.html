@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body_block %}
+<div class="container upload-form">
+    <div class="card row">
+        <div class="card-block upload-card">
+            <table class="table table-borderless">
+                <tr>
+                    <td rowspan="8">
+                        <div>
+                            <img class="coverImgLarge" src="/media/{{book.book_cover}}">
+                            <hr>
+                            {% if not user.is_superuser %}
+                            <input type="button" class="btn btn-primary btn-block" value="Borrow">
+                            {% endif %}
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <h3>{{book.title}}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="author-lbl">by {{book.author}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="genre-lbl">Genre - {{book.genre}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="genre-lbl">Description - {{book.description}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="genre-lbl">Uploader - {{book.uploader}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="genre-lbl">Publication - {{book.publication}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="genre-lbl">Year - {{book.year}}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

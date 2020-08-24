@@ -2,7 +2,7 @@ import zipfile
 from lxml import etree
 from formtools.wizard.views import SessionWizardView
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -217,3 +217,11 @@ def get_epub_info(fname):
             res[s] = ''
 
     return res
+
+
+class BookDetailView(DetailView):
+    model = models.Book
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(pk=self.kwargs.get('pk'))

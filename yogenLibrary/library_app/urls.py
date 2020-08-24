@@ -15,4 +15,5 @@ urlpatterns = [
     url('upload_book/',  views.ContactWizard.as_view(
         [forms.UploadBookForm1, forms.SelectAuthorForm2]), name='upload_book'),
     url('books/', views.BookListView.as_view(), name='books'),
+    url('view/book/(?P<pk>\d+)/', views.BookDetailView.as_view(), name='book_detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
