@@ -31,3 +31,8 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class RecommendedBook(models.Model):
+    book_index = models.IntegerField()
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)

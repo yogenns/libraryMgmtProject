@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Genre, Author
+from .models import Genre, Author, RecommendedBook, Book
 
 
 class CreateUserForm(UserCreationForm):
@@ -27,6 +27,8 @@ class CreateGenreForm(forms.ModelForm):
 
 
 class CreateAuthorForm(forms.ModelForm):
+    genre = forms.ModelChoiceField(queryset=Genre.objects.all())
+
     class Meta:
         model = Author
         fields = ('name',)
@@ -52,3 +54,24 @@ class SelectAuthorForm2(forms.Form):
     uploader = forms.CharField(max_length=1024)
     publication = forms.CharField(max_length=1024)
     year = forms.IntegerField()
+
+
+class CreateRecommendedBookForm(forms.ModelForm):
+
+    class Meta:
+        model = RecommendedBook
+        fields = ('book', 'book_index')
+
+        CHOICES = (
+            ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
+            ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'),
+
+        )
+        widgets = {
+            'book_index': forms.Select(choices=CHOICES),
+        }
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['book_index'] = [1, 2, 3, 4, 5, 6, 7, 8]
+        return initial

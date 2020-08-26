@@ -225,3 +225,15 @@ class BookDetailView(DetailView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(pk=self.kwargs.get('pk'))
+
+
+class CreateRecommendedBookListView(SuperUserRequiredMixin, CreateView):
+    model = models.RecommendedBook
+    form_class = forms.CreateRecommendedBookForm
+    success_url = reverse_lazy('library_app:recommended_books')
+    template_name = 'library_app/recommendedbook_list.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['recommendedbook_list'] = models.RecommendedBook.objects.order_by(
+            'pk')
+        return super(CreateRecommendedBookListView, self).get_context_data(**kwargs)
