@@ -62,16 +62,41 @@ class CreateRecommendedBookForm(forms.ModelForm):
         model = RecommendedBook
         fields = ('book', 'book_index')
 
-        CHOICES = (
-            ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
-            ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'),
-
-        )
+        # FIX THIS LATER.. Need a method call instead of repeating logic
+        num_of_recommendations = 8
+        choices_list = []
+        print("Get Remaining Index")
+        for var in range(1, num_of_recommendations+1):
+            try:
+                RecommendedBook.objects.get(book_index=var)
+            except RecommendedBook.DoesNotExist:
+                choices_list.append((var, var))
+        print(choices_list)
+        CHOICES = tuple(choices_list)
         widgets = {
             'book_index': forms.Select(choices=CHOICES),
         }
 
+    def get_choices_for_index(self):
+        num_of_recommendations = 8
+        choices_list = []
+        print("get_choices_for_index")
+        for var in range(1, num_of_recommendations+1):
+            try:
+                RecommendedBook.objects.get(book_index=var)
+            except RecommendedBook.DoesNotExist:
+                choices_list.append((var, var))
+        print(choices_list)
+        return tuple(choices_list)
+
+    def __init__(self, *args, **kwargs):
+        print("__init__")
+        super(CreateRecommendedBookForm, self).__init__(*args, **kwargs)
+        self.fields['book_index'].widget.choices = self.get_choices_for_index()
+        books = Book.objects.exclude(
+            id__in=RecommendedBook.objects.values_list('book', flat=True).all())
+        self.fields['book'].queryset = books
+
     def get_initial(self):
         initial = super().get_initial()
-        initial['book_index'] = [1, 2, 3, 4, 5, 6, 7, 8]
         return initial

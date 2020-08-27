@@ -2,7 +2,7 @@ import zipfile
 from lxml import etree
 from formtools.wizard.views import SessionWizardView
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
@@ -237,3 +237,24 @@ class CreateRecommendedBookListView(SuperUserRequiredMixin, CreateView):
         kwargs['recommendedbook_list'] = models.RecommendedBook.objects.order_by(
             'pk')
         return super(CreateRecommendedBookListView, self).get_context_data(**kwargs)
+
+
+class DeleteRecommendedBookView(SuperUserRequiredMixin, DeleteView):
+    model = models.RecommendedBook
+    success_url = reverse_lazy('library_app:recommended_books')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        selected_list = self.request.POST.get("selectedRows").split(',')
+        if 'all' in selected_list:
+            return queryset
+        else:
+            print(selected_list)
+            return queryset.filter(pk__in=selected_list)
+
+    def delete(self, *args, **kwargs):
+        topics = self.get_queryset()
+        print("Deleting RecommendedBook")
+        print(topics)
+        topics.delete()
+        return HttpResponseRedirect('/recommended_books/')

@@ -4,19 +4,35 @@
 
 <div class="container">
     <h3>Recommended Book List</h3>
+    <div class="card row">
+        <div class="card-block upload-card">
+
+            <form id="form-add" action="/recommended_books/" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                <button id="view" class="btn btn-info" onclick="add()">Add</button>
+            </form>
+        </div>
+    </div>
+    <hr>
     <div class="toolbar">
+        <button id="remove" class="btn btn-danger" disabled onclick="remove()">Delete</button>
 
-        <form id="form-btn" action="/recommended_books/add/" method="POST">
+        <form id="form-btn" action="/recommended_books/delete/" method="POST">
             {% csrf_token %}
-            {% bootstrap_form form %}
-
-            <button id="view" class="btn btn-info" onclick="add()">Add</button>
+            <input type="hidden" id="selectedRows" name="selectedRows">
         </form>
     </div>
     <table id="table" class="table table-striped">
         <thead>
             <tr>
-                <th scope="col" data-checkbox="true">#</th>
+                {% if recommendedbook_list %}
+                <th scope="col"><input type="checkbox" class="largerCheckbox" id="all" onchange="setSelection(this)">
+                </th>
+                {% else %}
+                <th>#</th>
+                {% endif %}
                 <th scope="col">Index</th>
                 <th scope="col">Title</th>
                 <th scope="col">Cover</th>
@@ -49,5 +65,34 @@
         </tbody>
     </table>
 </div>
+<script>
+    selections = []
+    function remove() {
+        var form_btn = document.getElementById('form-btn')
+        form_btn.submit()
+    }
+    function setSelection(temp) {
 
+        if (temp.checked == true) {
+            selections.push(temp.id)
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', true);
+            }
+        }
+        else {
+            if (temp.id === 'all') {
+                $(".largerCheckbox").prop('checked', false);
+            }
+            selections.splice(selections.indexOf(temp.id), 1)
+        }
+        if (selections.length > 0) {
+            $("#remove").prop('disabled', false)
+
+        } else {
+            $("#remove").prop('disabled', true)
+        }
+        console.log(selections);
+        document.getElementById('selectedRows').value = selections
+    }
+</script>
 {% endblock %}

@@ -17,6 +17,8 @@ urlpatterns = [
     url('^books/', views.BookListView.as_view(), name='books'),
     url('^view/book/(?P<pk>\d+)/',
         views.BookDetailView.as_view(), name='book_detail'),
-    url('^recommended_books/', views.CreateRecommendedBookListView.as_view(),
+    url('^recommended_books/$', views.CreateRecommendedBookListView.as_view(),
         name='recommended_books'),
+    url('^recommended_books/delete/$', views.DeleteRecommendedBookView.as_view(),
+        name='recommended_books_delete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
