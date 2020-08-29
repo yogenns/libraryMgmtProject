@@ -315,3 +315,11 @@ class LoanListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return models.Book.objects.filter(useraccount=self.request.user).order_by('pk')
+
+
+class BrowseListView(ListView):
+    paginate_by = 10
+    template_name = 'library_app/browse.html'
+
+    def get_queryset(self):
+        return models.Book.objects.all().order_by('pk')

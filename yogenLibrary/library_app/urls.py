@@ -24,4 +24,5 @@ urlpatterns = [
     url('^borrow/$', views.borrow_book, name='borrow'),
     url('^return/$', views.return_book, name='return'),
     url('^loans/', views.LoanListView.as_view(), name='loans'),
+    url('^browse/', views.BrowseListView.as_view(), name='browse'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

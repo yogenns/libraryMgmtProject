@@ -28,7 +28,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="nav nabar-nav mr-auto">
-          <li><a class="btn btn-simple" href="#">Browse</a></li>
+          <li><a class="btn btn-simple" href="{% url 'library_app:browse' %}">Browse</a></li>
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
