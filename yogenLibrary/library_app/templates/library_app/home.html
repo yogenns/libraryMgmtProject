@@ -1,4 +1,24 @@
 {% extends "base.html" %}
 {% block body_block %}
-<h2>Recommended Books List</h2>
+{% load library_filters %}
+
+<div class="container">
+    <h2>Recommendations</h2>
+    <table class="table">
+        <tr class="row justify-content-md-center">
+            {% for var in 11|times %}
+            <td class="col-lg-2 col-md-3 card-block book-card">
+
+                <img src="/media/{{ recommended_list|return_book_cover:var }}" class="coverImgLarge">
+                <br>
+                <span><a
+                        href="/view/book/{{ recommended_list|return_book_id:var }}">{{ recommended_list|return_book_title:var }}</a></span>
+                <br>
+                <span>{{ recommended_list|return_book_author:var }}</span>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+
+</div>
 {% endblock %}

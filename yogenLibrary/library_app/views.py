@@ -18,6 +18,11 @@ from PyPDF2 import PdfFileReader
 class HomeView(TemplateView):
     template_name = 'library_app/home.html'
 
+    def get_context_data(self, **kwargs):
+        kwargs['recommended_list'] = list(models.RecommendedBook.objects.order_by(
+            'id'))
+        return super(HomeView, self).get_context_data(**kwargs)
+
 
 class SignUp(CreateView):
     form_class = forms.CreateUserForm
