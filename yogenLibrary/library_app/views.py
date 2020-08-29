@@ -293,3 +293,17 @@ def borrow_book(request):
             return HttpResponseRedirect('/view/book/'+borrow_id)
     else:
         return Http404
+
+
+@login_required
+def return_book(request):
+    if request.method == 'POST':
+        returnBookId = request.POST['returnBookId']
+        book = get_object_or_404(models.Book, pk=returnBookId)
+        user = request.user
+
+        user_account = get_object_or_404(models.UserAccount, pk=user.pk)
+        user_account.borrowed_books.remove(book)
+        return HttpResponseRedirect('/view/book/'+returnBookId)
+    else:
+        return Http404

@@ -22,4 +22,5 @@ urlpatterns = [
     url('^recommended_books/delete/$', views.DeleteRecommendedBookView.as_view(),
         name='recommended_books_delete'),
     url('^borrow/$', views.borrow_book, name='borrow'),
+    url('^return/$', views.return_book, name='return'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
