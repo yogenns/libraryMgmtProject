@@ -307,3 +307,11 @@ def return_book(request):
         return HttpResponseRedirect('/view/book/'+returnBookId)
     else:
         return Http404
+
+
+class LoanListView(LoginRequiredMixin, ListView):
+    paginate_by = 10
+    template_name = 'library_app/borrowed_list.html'
+
+    def get_queryset(self):
+        return models.Book.objects.filter(useraccount=self.request.user).order_by('pk')
