@@ -1,13 +1,15 @@
+from django.forms import ValidationError
+from django.contrib.auth.decorators import login_required
 import zipfile
 from lxml import etree
 from formtools.wizard.views import SessionWizardView
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from . import forms
 from . import models
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
@@ -231,6 +233,17 @@ class BookDetailView(DetailView):
         queryset = super().get_queryset()
         return queryset.filter(pk=self.kwargs.get('pk'))
 
+    def get_context_data(self, **kwargs):
+        try:
+            user = self.request.user
+            user_account = get_object_or_404(
+                models.UserAccount, pk=user.pk)
+            if user_account.borrowed_books.filter(pk=self.kwargs.get('pk')).count() > 0:
+                kwargs['is_book_borrowed'] = True
+        except:
+            print("User Account Not Present")
+        return super(BookDetailView, self).get_context_data(**kwargs)
+
 
 class CreateRecommendedBookListView(SuperUserRequiredMixin, CreateView):
     model = models.RecommendedBook
@@ -263,3 +276,20 @@ class DeleteRecommendedBookView(SuperUserRequiredMixin, DeleteView):
         print(topics)
         topics.delete()
         return HttpResponseRedirect('/recommended_books/')
+
+
+@login_required
+def borrow_book(request):
+    if request.method == 'POST':
+        borrow_id = request.POST['borrowBookId']
+        book = get_object_or_404(models.Book, pk=borrow_id)
+        user = request.user
+
+        user_account = get_object_or_404(models.UserAccount, pk=user.pk)
+        if user_account.borrowed_books.all().count() >= 2:
+            return HttpResponseRedirect('/view/book/'+borrow_id+'/?limitcrossed=true')
+        else:
+            user_account.borrowed_books.add(book)
+            return HttpResponseRedirect('/view/book/'+borrow_id)
+    else:
+        return Http404

@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block body_block %}
 <div class="container upload-form">
+    {% if request.GET.limitcrossed %}
+    <h3>You have reached borrow limit. You are allowed to borrow only 2 books</h3>
+    {% endif %}
     <div class="card row">
         <div class="card-block upload-card">
             <table class="table table-borderless">
@@ -10,7 +13,19 @@
                             <img class="coverImgLarge" src="/media/{{book.book_cover}}">
                             <hr>
                             {% if not user.is_superuser %}
-                            <input type="button" class="btn btn-primary btn-block" value="Borrow">
+                            {% if is_book_borrowed  %}
+                            <form id="form-return" action="/return/" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-success btn-block" value="Return">
+                                <input type="hidden" id="returnBookId" name="returnBookId" value={{book.pk}}>
+                            </form>
+                            {% else %}
+                            <form id="form-borrow" action="/borrow/" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-primary btn-block" value="Borrow">
+                                <input type="hidden" id="borrowBookId" name="borrowBookId" value={{book.pk}}>
+                            </form>
+                            {% endif %}
                             {% endif %}
 
                         </div>
