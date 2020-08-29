@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import User, PermissionsMixin
 # Create your models here.
 
 
@@ -36,3 +37,7 @@ class Book(models.Model):
 class RecommendedBook(models.Model):
     book_index = models.IntegerField()
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+
+class UserAccount(User, PermissionsMixin):
+    borrowed_books = models.ManyToManyField(Book)

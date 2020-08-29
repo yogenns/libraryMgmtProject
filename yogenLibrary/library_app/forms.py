@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Genre, Author, RecommendedBook, Book
+from .models import Genre, Author, RecommendedBook, Book, UserAccount
 
 
 class CreateUserForm(UserCreationForm):
 
     class Meta:
         fields = ('username', 'email', 'password1')
-        model = get_user_model()
+        model = UserAccount
 
     # Use below to update Labels of fields on Sign Up Page
     # def __init__(self, *args, **kwargs):
@@ -65,13 +65,13 @@ class CreateRecommendedBookForm(forms.ModelForm):
         # FIX THIS LATER.. Need a method call instead of repeating logic
         num_of_recommendations = 8
         choices_list = []
-        print("Get Remaining Index")
+        #print("Get Remaining Index")
         for var in range(1, num_of_recommendations+1):
             try:
                 RecommendedBook.objects.get(book_index=var)
             except RecommendedBook.DoesNotExist:
                 choices_list.append((var, var))
-        print(choices_list)
+        # print(choices_list)
         CHOICES = tuple(choices_list)
         widgets = {
             'book_index': forms.Select(choices=CHOICES),
