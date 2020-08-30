@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.forms import ValidationError
 from django.contrib.auth.decorators import login_required
 import zipfile
@@ -322,4 +323,11 @@ class BrowseListView(ListView):
     template_name = 'library_app/browse.html'
 
     def get_queryset(self):
-        return models.Book.objects.all().order_by('pk')
+        if self.request.GET.get('q', '') != '':
+            query_string = self.request.GET['q']
+            query = Q(title__contains=query_string)
+            query.add(Q(author__name__contains=query_string), Q.OR)
+            query.add(Q(genre__name__contains=query_string), Q.OR)
+            return models.Book.objects.filter(query).order_by('pk')
+        else:
+            return models.Book.objects.all().order_by('pk')
